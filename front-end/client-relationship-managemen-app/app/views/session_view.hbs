@@ -1,0 +1,455 @@
+{{!-- Some front-end code are from the Demo code in The CS230 module(with modify) --}}
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Exame</title>
+    <link href="/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/css/all.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+    <div class="container">
+        <!-- class="table-responsive text-nowrap (play with Bootstrap attributes for look you want) -->
+        <h2><a class="breadcrumb-item text-dark" href="/session">Psychotherapy and Counselling Service</a> <span
+                class="badge badge-secondary" id="databaseFilterNotice"></span></h2>
+        <!-- Database Search -->
+        <div class="input-group mb-3">
+            <!-- Add Button  -->
+            <button class="btn btn-primary mr-5" data-toggle="modal" data-target="#addModal">Add</button>
+            <!-- Search the Database (Session) -->
+            <div class="input-group-prepend">
+                <select class="custom-select" id="databaseSearchSelect">
+                    <option value="client">Client</option>
+                    <option value="therapist">Therapist</option>
+                    <option value="session" selected>Session</option>
+                </select>
+            </div>
+            <input class="form-control border" type="search" placeholder="Input Keyword ..." id="databaseSearchFilter">
+            <div class="input-group-append">
+                <button class="btn btn-success" type="button" id="databaseSearch">Search</button>
+            </div>
+        </div>
+
+        <!-- Session Table -->
+        <table class="table table-hover table-striped" id="sessionList">
+            <thead>
+                <tr>
+                    <th>Session date</th>
+                    <th>Session time</th>
+                    <th>Clients</th>
+                    <th>Therapist</th>
+                    <th>Fee</th>
+                    <th>Session number</th>
+                    <th>Session duration</th>
+                    <th>Session type</th>
+                    <th>Issue flag</th>
+                    <th>Session notes</th>
+                    <th>Options</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each results}}
+                <tr>
+                    <td>{{session_date}}</td>
+                    <td>{{session_time}}</td>
+                    <td>{{#each clients}}{{first_name}} {{surname}},</br>{{/each}}</td>
+                    <td>{{therapist.first_name}} {{therapist.surname}}</td>
+                    <td>€ {{fee}}</td>
+                    <td>{{session_number}}</td>
+                    <td>{{session_duration}}</td>
+                    <td>{{session_type}}</td>
+                    {{#if issue_flag}} <td>Yes</td> {{else}} <td>No</td> {{/if}}
+                    <td>{{session_notes}}</td>
+                    <td>
+                        <a href="javascript:void(0);" class="btn btn-sm btn-warning update" data-id="{{ _id }}"
+                            data-session_date="{{ session_date }}"
+                            data-session_time="{{ session_time }}" data-clients="{{#each clients}}{{_id}}/{{/each}}"
+                            data-therapist="{{ therapist._id }}" data-fee="{{ fee }}"
+                            data-session_number="{{ session_number }}" data-session_duration="{{ session_duration }}"
+                            data-session_type="{{ session_type }}" data-city="{{ city }}"
+                            data-issue_flag="{{ issue_flag }}" data-session_notes="{{ session_notes }}">Update</a>
+                        <a href="javascript:void(0);" class="btn btn-sm btn-danger delete" data-id="{{ _id }}"
+                            data-title="{{ title }}" data-session_date="{{ session_date }}"
+                            data-session_time="{{ session_time }}" data-clients="{{#each clients}}{{_id}}/{{/each}}"
+                            data-therapist="{{ therapist._id }}" data-fee="{{ fee }}"
+                            data-session_number="{{ session_number }}" data-session_duration="{{ session_duration }}"
+                            data-session_type="{{ session_type }}" data-city="{{ city }}"
+                            data-issue_flag="{{ issue_flag }}" data-session_notes="{{ session_notes }}">Delete</a>
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+
+        <!-- Modal Add Session-->
+        <form id="addForm" action="/session" method="POST">
+            <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Add New Session</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <h5>Session Information</h5>
+                            <div class="form-group">
+                                <label for="session_date">Session data </label>
+                                <input type="date" name="session_date" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="session_date">Session time </label>
+                                <input type="time" name="session_time" class="form-control" placeholder="Session time">
+                            </div>
+                            <div class="form-group">
+                                <input type="text" name="clients" class="form-control" placeholder="Clients ID, Split by '/' ">
+                                {{!-- <input type="hidden" name="clients" id="clients"> --}}
+                            </div>
+                            <div class="form-group">
+                                {{!-- <select name="session" class="form-control">
+                                    <option value="true">Yes</option>
+                                    <option value="false">No</option>
+                                </select> --}}
+                                <input type="text" name="therapist" class="form-control" placeholder="Therapist">
+                            </div>
+                            <div class="form-group">
+                                <input type="number" step="0.01" name="fee" class="form-control" placeholder="Fee"
+                                    required>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" name="session_number" class="form-control"
+                                    placeholder="Session number" required>
+                            </div>
+                            <div class="form-group">
+                                <input list="session_duration_list" class="form-control" type="text"
+                                    name="session_duration" placeholder="Session duration">
+                                <datalist id="session_duration_list">
+                                    <option value="Cancelled">Cancelled</option>
+                                    <option value="No Show">No Show</option>
+                                </datalist>
+                            </div>
+                            <div class="form-group">
+                                <input list="session_type_list" class="form-control" type="text"
+                                    placeholder="Session type" name="session_type">
+                                <datalist id="session_type_list">
+                                    <option value="Intake">Intake</option>
+                                    <option value="Psychotherapy">Psychotherapy</option>
+                                    <option value="Assessment">Assessment</option>
+                                </datalist>
+                            </div>
+                            <div class="form-group">
+                                <label for="issue_flag">Issue flag </label>
+                                <select name="issue_flag" class="form-control">
+                                    <option value="true">Yes</option>
+                                    <option value="false">No</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <textarea name="session_notes" class="form-control"
+                                    placeholder="Session notes"></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <!-- Modal Update Session -->
+        <form id="updateForm" action="/session" method="PUT">
+            <!-- we can't PUT with HTML form - this is just an attribute  picked up by AjAX -->
+            <div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Update Session</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <h5>Session Information</h5>
+
+                            <div class="form-group">
+                                <label for="session_date">Session data </label>
+                                <input type="date" name="session_date" class="form-control session_date" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="session_date">Session time </label>
+                                <input type="time" name="session_time" class="form-control session_time"
+                                    placeholder="Session time">
+                            </div>
+                            <div class="form-group">
+                                <input type="text" name="clients" class="form-control clients" placeholder="Clients">
+                                {{!-- <input type="hidden" name="clientsArr" class="clientsArr"> --}}
+                            </div>
+                            <div class="form-group">
+                                <input type="text" name="therapist" class="form-control therapist"
+                                    placeholder="Therapist">
+                            </div>
+                            <div class="form-group">
+                                <input type="number" step="0.01" name="fee" class="form-control fee" placeholder="Fee"
+                                    required>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" name="session_number" class="form-control session_number"
+                                    placeholder="Session number" required>
+                            </div>
+                            <div class="form-group">
+                                <input list="session_duration_list" class="form-control session_duration" type="text"
+                                    name="session_duration" placeholder="Session duration">
+                                <datalist id="session_duration_list">
+                                    <option value="Cancelled">Cancelled</option>
+                                    <option value="No Show">No Show</option>
+                                </datalist>
+                            </div>
+                            <div class="form-group">
+                                <input list="session_type_list" class="form-control session_type" type="text"
+                                    placeholder="Session type" name="session_type">
+                                <datalist id="session_type_list">
+                                    <option value="Intake">Intake</option>
+                                    <option value="Psychotherapy">Psychotherapy</option>
+                                    <option value="Assessment">Assessment</option>
+                                </datalist>
+                            </div>
+                            <div class="form-group">
+                                <label for="issue_flag">Issue flag </label>
+                                <select name="issue_flag" class="form-control issue_flag">
+                                    <option value="true">Yes</option>
+                                    <option value="false">No</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <textarea name="session_notes" class="form-control session_notes"
+                                    placeholder="Session notes"></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="hidden" name="sessionId" class="id">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Update</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <!-- Modal Delete Session-->
+        <form id="deleteForm" action="/session" method="DELETE">
+            <!-- we can't DELETE with HTML form - this is just an attribute  picked up by AjAX -->
+            <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="myModalLabel">Delete Session</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                    aria-hidden="true">&times;</span></button>
+                        </div>
+                        <div class="modal-body">
+                            <strong>Are you sure you want to delete this session?</strong>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="hidden" name="sessionId" class="form-control id" required>
+                            <button type="submit" class="btn btn-success">Delete</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <!-- Operation Successful Alert Modal -->
+        <div class="modal fade" id="successAlert" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="alert alert-success" role="alert">
+                    <strong>Oh Great!</strong> RESTful Operation was Successful!
+                </div>
+            </div>
+        </div>
+
+        <!-- Operation Unsuccessful Alert Modal -->
+        <div class="modal fade" id="errorAlert" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="alert alert-danger" role="alert">
+                    <strong>Oh No!</strong> RESTful Operation was Unsuccessful!
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/assets/js/jquery-3.5.0.min.js"></script>
+    <script src="/assets/js/bootstrap.bundle.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            //
+            // Handle Add Modal form submit using AJAX PUT
+            //
+            var addForm = $("#addForm");
+            addForm.submit(function (e) {
+                //console.log(addForm.find('input[name="clientsInput"]').val());
+                //addForm.find('input[name="clients"]').val(addForm.find('input[name="clientsInput"]').val.split(","));
+                e.preventDefault(); // prevent handling the normal form submit click!
+                $.ajax({
+                    type: addForm.attr('method'),
+                    url: addForm.attr('action'),
+                    data: addForm.serialize(), // get data from form!
+                    success: function (data) {
+                        console.log('Update successful!');
+                        // make a timed Bootstrap Alert on Success
+                        // then re-direct to "/"
+                        $('#successAlert').modal('show');
+                        var timer = setTimeout(function () {
+                            $(location).attr('href', '/session')
+                        }, 2000);
+                    },
+                    error: function (data) {
+                        console.log('An error occurred.');
+                        // make a timed Bootstrap Alert on Error
+                        // then re-direct to "/"
+                        $('#errorAlert').modal('show');
+                        var timer = setTimeout(function () {
+                            $(location).attr('href', '/session')
+                        }, 2000);
+                    },
+                });
+                $('#addModal').modal('hide');
+            });
+            //
+            // Set up the Update Modal - It is shown, and data passed, via button click
+            //
+            $('#sessionList').on('click', '.update', function () {
+                $('#updateModal').modal('show');
+                var sessionDate = new Date($(this).data('session_date'));
+                month = '' + (sessionDate.getMonth() + 1),
+                    day = '' + sessionDate.getDate(),
+                    year = sessionDate.getFullYear();
+
+                if (month.length < 2)
+                    month = '0' + month;
+                if (day.length < 2)
+                    day = '0' + day;
+
+                $('.session_date').val([year, month, day].join('-'));
+                //$(".session_date").val($(this).data('session_date'));
+                $('.session_time').val($(this).data('session_time'));
+                $('.clients').val($(this).data('clients'));
+                $('.therapist').val($(this).data('therapist'));
+                $('.fee').val($(this).data('fee'));
+                $('.session_number').val($(this).data('session_number'));
+                $('.session_duration').val($(this).data('session_duration'));
+                $('.session_type').val($(this).data('session_type'));
+                $('.issue_flag').val($(this).data('issue_flag').toString());
+                $('.session_notes').val($(this).data('session_notes'));
+                $('.id').val($(this).data('id'));
+                //console.log(birthday.format("yyyy-MM-dd hh:mm:ss"))
+                //$('.date_of_birth').val(new Date($(this).data('date-of-birth')).format("yyyy-MM-dd hh:mm:ss"));
+            });
+            //
+            // Handle Update Modal form submit using AJAX PUT
+            //
+            var updateForm = $("#updateForm");
+            updateForm.submit(function (e) {
+                e.preventDefault(); // prevent handling the normal form submit click!
+                var id = updateForm.find('input[name="sessionId"]').val();
+                $.ajax({
+                    type: updateForm.attr('method'),
+                    url: updateForm.attr('action') + "/" + id,
+                    data: updateForm.serialize(), // get data from form!
+                    success: function (data) {
+                        console.log('Update successful!');
+                        // make a timed Bootstrap Alert on Success
+                        // then re-direct to "/"
+                        $('#successAlert').modal('show');
+                        var timer = setTimeout(function () {
+                            $(location).attr('href', '/session')
+                        }, 3000);
+                    },
+                    error: function (data) {
+                        console.log('An error occurred.');
+                        // make a timed Bootstrap Alert on Error
+                        // then re-direct to "/"
+                        $('#errorAlert').modal('show');
+                        var timer = setTimeout(function () {
+                            $(location).attr('href', '/session')
+                        }, 3000);
+                    },
+                });
+                $('#updateModal').modal('hide');
+            });
+            //
+            // Set up the Delete Modal - It is shown, and data passed, via button click
+            //
+            $('#sessionList').on('click', '.delete', function () {
+                var session_id = $(this).data('id');
+                // let's remind the user which quotation they are deleting
+                var therapist = $(this).data('therapist');
+                //var subQuote = quotation_quote.substring(0, 15);
+                //var authorSurname = quotation_author.split(" ").splice(-1)[0];
+                $("#deleteModal .modal-body").html("<span class=\"font-weight-bold\">Are you sure you want to delete <span class=\"font-italic\">" + therapist.first_name + " " + therapist.surname + "'s </span> Session ?");
+                $('#deleteModal').modal('show');
+                $('.id').val(session_id);
+            });
+            //
+            // Handle Delete Modal form submit using AJAX DELETE
+            //
+            var deleteForm = $("#deleteForm");
+            deleteForm.submit(function (e) {
+                // make everything look like a Single Page Application
+                // consuming the RESTful API routes based on user selection
+                e.preventDefault();  // prevent handling the normal form submit click!
+                var id = deleteForm.find('input[name="sessionId"]').val();
+                $.ajax({
+                    type: deleteForm.attr('method'),
+                    url: deleteForm.attr('action') + "/" + id,
+                    success: function (data) {
+                        console.log('Deletion successful!');
+                        // make a timed Bootstrap Alert on Success
+                        // then re-direct to "/"
+                        $('#successAlert').modal('show');
+                        var timer = setTimeout(function () {
+                            $(location).attr('href', '/session')
+                        }, 3000);
+                    },
+                    error: function (data) {
+                        console.log('An error occurred.');
+                        // make a timed Bootstrap Alert on Error
+                        // then re-direct to "/"
+                        $('#errorAlert').modal('show');
+                        var timer = setTimeout(function () {
+                            $(location).attr('href', '/session')
+                        }, 3000);
+                    },
+                });
+                $('#deleteModal').modal('hide');
+            });
+            //
+            // Search: Database search
+            //
+            $("#databaseSearch").on('click', function () {
+                var search = $("#databaseSearchFilter").val().replace(/[|&;$%@"<>()+,^  ]/g, "");
+                if (search) {
+                    $(location).attr('href', '/' + $("#databaseSearchSelect").val() + '/' + search);
+                } else {
+                    $(location).attr('href', '/' + $("#databaseSearchSelect").val());
+                }
+            });
+            //
+            //  If there is a database filter then add a badge
+            //
+            if ($(location).attr('pathname') !== '/') {
+                $('#databaseFilterNotice').text("(" + $(location).attr('pathname') + ")");
+            }
+        });
+    </script>
+</body>
+
+</html>

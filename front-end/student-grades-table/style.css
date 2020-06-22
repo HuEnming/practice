@@ -1,0 +1,121 @@
+ /* The codes were developed and works well on Manjaro Linux with Firefox 73.0 (64-bit) */
+/* remove default style */
+*{
+    margin:0;
+    padding:0;
+    font-size:14px;
+} 
+/* remove input border */
+input{
+    /* display: inline-block; */
+    width: 100%;
+    height: 100%;
+	outline-width: 0px ;
+	border: none ;
+	outline-color: transparent ;
+    box-shadow: none;
+    background: none;
+    text-align: right;
+    font-size: 100%;
+}
+/* td inpu[value=""]{
+    text-align: center;
+} */
+/* display "-" when the data is blank or invalid */
+table tr td input:invalid {
+    text-align: center;
+    background-color: yellow;
+    width: 100%;
+    height: 100%; 
+    padding: 5px 0px; 
+}
+
+/* remove input number style (right side arrows) */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+input[type="number"]{
+  -moz-appearance: textfield;
+}
+
+/* table tr td input[value=null]{
+    text-align: center !important; 
+} */
+/* setting text center */
+table tr th input{
+    text-align: center; 
+    font-weight:bold;
+    color: black;
+}
+
+/* setting text font */
+body{
+    margin: 3%;
+    text-align: center;
+    font-family: sans-serif;
+    /* font-size:14px;*/
+}
+
+h2{
+    font-size: 16px;
+    margin:10px 0;
+}
+
+table{
+    /* overflow: hidden; */
+    border-collapse: collapse;
+    font-size: 17px;
+    line-height: 30px;
+    /* line-height: 54px; */
+    /* table-layout: fixed; */
+}
+
+table, th, td {
+    border: 1px solid black;
+}
+
+td,th{
+    width: 172px; 
+}
+/* setting different color for odd row and even row */
+tr:nth-child(odd){
+    background-color: #E0E0E0;
+}
+
+tr:nth-child(even) {
+    background-color: #F0F0F0;
+}
+/* name and id right-aligned */
+table tr td:nth-child(-n+2) {
+    text-align: left;
+}
+
+th:nth-last-child(1) {
+    cursor: pointer;
+}
+/* average right-aligned */
+td:nth-last-child(1) {
+    text-align: right;
+}
+td:nth-child(1) {
+    cursor: pointer;
+}
+/* change table head background */
+th{
+    background-color: #A5A5A5;
+}
+
+.operate{
+    margin: 5px 0;
+    text-align: left;
+}
+
+td:nth-child(-n+2) input{
+    text-align: left;
+}
+
+
+
+/* 内容字高17
+表格宽172 */

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Food Pyramid</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js"></script>
+</head>
+
+<body>
+  <div class="pyramid">
+    <div class="bg1">
+      <div class="shelf-number">1</div>
+      <div class="red shelf">
+        <div class="circle-group1">
+          <span class="circle operator" onclick="add(event)">+</span>
+          <span class="circle">6</span>
+          <span class="circle operator" onclick="minus(event)">-</span>
+        </div>
+      </div>
+      
+    </div>
+    <div class="bg2">
+      <div class="shelf-number">2</div>
+      <div class="yellow shelf" id="yellow">
+        <div class="circle-group2">
+          <span class="circle operator" onclick="add(event)">+</span>
+          <span class="circle">4</span>
+          <span class="circle operator" onclick="minus(event)">-</span>
+        </div>
+      </div>
+    </div>
+    <div class="bg3">
+      <div class="shelf-number">3</div>
+      <div class="golden shelf">
+        <div class="circle-group3">
+          <span class="circle operator" onclick="add(event)">+</span>
+          <span class="circle">3</span>
+          <span class="circle operator" onclick="minus(event)">-</span>
+        </div>
+      </div>
+    </div>
+    <div class="bg4">
+      <div class="shelf-number">4</div>
+      <div class="blue shelf">
+        <div class="circle-group4">
+          <span class="circle operator" onclick="add(event)">+</span>
+          <span class="circle">3</span>
+          <span class="circle operator" onclick="minus(event)">-</span>
+        </div>
+      </div>
+    </div>
+    <div class="bg5">
+      <div class="shelf-number">5</div>
+      <div class="brown shelf">
+        <div class="circle-group5">
+          <span class="circle operator" onclick="add(event)">+</span>
+          <span class="circle">4</span>
+          <span class="circle operator" onclick="minus(event)">-</span>
+        </div>
+      </div>
+    </div>
+    <div class="bg6">
+      <div class="shelf-number">6</div>
+      <div class="green shelf">
+        <div class="circle-group6">
+          <span class="circle operator" onclick="add(event)">+</span>
+          <span class="circle">2</span>
+          <span class="circle operator" onclick="minus(event)">-</span>
+        </div>
+      </div>
+    </div>
+    <form>
+      <input type="date" name="date">
+      <button type="button" onclick="showDate(event)">Submit</button> 
+    </form>
+  </div>
+</body>
+
+</html>

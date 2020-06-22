@@ -1,0 +1,34 @@
+<!-- The codes were developed and works well on Manjaro Linux with Firefox 73.0 (64-bit)-->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simon Memory Game</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css?family=Orbitron&display=swap" rel="stylesheet"> 
+  <script src="script.js"></script>
+</head>
+
+<body>
+  <!-- center black circle - start -->
+  <div class="big-circle">
+    <span class="left-number">00</span>
+    <span class="middle-button" onclick="start()">START</span>
+    <span class="right-number">00</span>
+    <span class="dot"></span>
+  </div>
+  <!-- center black circle - end -->
+  <!-- colorful clickable circle - start -->
+  <div class="circle-group">
+    <div class="small-circle green" id="green" onclick="check(event)"></div>
+    <div class="small-circle red" id="red" onclick="check(event)"></div>
+    <div class="small-circle blue" id="blue" onclick="check(event)"></div>
+    <div class="small-circle yellow" id="yellow" onclick="check(event)"></div>
+  </div>
+  <!-- colorful clickable circle - end -->
+</body>
+
+</html>

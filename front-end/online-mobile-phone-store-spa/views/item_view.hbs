@@ -1,0 +1,360 @@
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>CA 7</title>
+    <link href="/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/css/all.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+    <div class="container">
+        <!-- class="table-responsive text-nowrap (play with Bootstrap attributes for look you want) -->
+        <h2><a class="breadcrumb-item text-dark" href="/item">Online Mobile Phone Store</a> <span
+                class="badge badge-secondary" id="databaseFilterNotice"></span></h2>
+
+        <!-- Database Search -->
+        <div class="input-group mb-3">
+            <!-- Add Button  -->
+            <button class="btn btn-primary mr-5" data-toggle="modal" data-target="#addModal">Add</button>
+            <!-- Search the Database (Items) -->
+            <div class="input-group-prepend">
+                <select class="custom-select" id="databaseSearchSelect">
+                    <option value="customer">Customer</option>
+                    <option value="item" selected>Item</option>
+                </select>
+            </div>
+            <input class="form-control border" type="search" placeholder="Input Keyword ..."
+                id="databaseSearchFilter">
+            <div class="input-group-append">
+                <button class="btn btn-success" type="button" id="databaseSearch">Search</button>
+            </div>
+        </div>
+
+        <!-- Items Table -->
+        <table class="table table-hover table-striped" id="itemList">
+            <thead>
+                <tr>
+                    <th>Manufacturer</th>
+                    <th>Model</th>
+                    <th>Price</th>
+                    <th>Options</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each results}}
+                <tr>
+                    <td>{{manufacturer}}</td>
+                    <td>{{model}}</td>
+                    <td>{{price}}</td>
+                    <td>
+                        <a href="javascript:void(0);" class="btn btn-sm btn-warning update" data-id="{{ _id }}"
+                            data-manufacturer="{{ manufacturer }}" data-model="{{ model }}"
+                            data-price="{{ price }}">Update</a>
+                        <a href="javascript:void(0);" class="btn btn-sm btn-danger delete" data-id="{{ _id }}"
+                            data-manufacturer="{{ manufacturer }}" data-model="{{ model }}"
+                            data-price="{{ price }}">Delete</a>
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+
+        <!-- Modal Add item-->
+        <form id="addForm" action="/item" method="POST">
+            <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Add New Item</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <h5>Item Information</h5>
+                            <div class="form-group">
+                                <input type="text" name="manufacturer" class="form-control" placeholder="Manufacturer"
+                                    required>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" name="model" class="form-control" placeholder="Model"
+                                    required>
+                            </div>
+                            <div class="form-group">
+                                <input type="tel" name="price" class="form-control" placeholder="Price" required>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <!-- Modal Update item -->
+        <form id="updateForm" action="/item" method="PUT">
+            <!-- we can't PUT with HTML form - this is just an attribute  picked up by AjAX -->
+            <div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Update Item</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <h5>Item Information</h5>
+                            <div class="form-group">
+                                <input type="text" name="manufacturer" class="form-control manufacturer" placeholder="Manufacturer"
+                                    required>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" name="model" class="form-control model" placeholder="Model"
+                                    required>
+                            </div>
+                            <div class="form-group">
+                                <input type="tel" name="price" class="form-control price" placeholder="Price" required>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="hidden" name="itemId" class="id">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Update</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <!-- Modal Delete Item-->
+        <form id="deleteForm" action="/item" method="DELETE">
+            <!-- we can't DELETE with HTML form - this is just an attribute  picked up by AjAX -->
+            <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="myModalLabel">Delete Item</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                    aria-hidden="true">&times;</span></button>
+                        </div>
+                        <div class="modal-body">
+                            <strong>Are you sure you want to delete this item?</strong>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="hidden" name="itemId" class="form-control id" required>
+                            <button type="submit" class="btn btn-success">Delete</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <!-- Operation Successful Alert Modal -->
+        <div class="modal fade" id="successAlert" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="alert alert-success" role="alert">
+                    <strong>Oh Great!</strong> RESTful Operation was Successful!
+                </div>
+            </div>
+        </div>
+
+        <!-- Operation Unsuccessful Alert Modal -->
+        <div class="modal fade" id="errorAlert" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="alert alert-danger" role="alert">
+                    <strong>Oh No!</strong> RESTful Operation was Unsuccessful!
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/assets/js/jquery-3.5.0.min.js"></script>
+    <script src="/assets/js/bootstrap.bundle.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            //
+            // Handle Add Modal form submit using AJAX PUT
+            //
+            var addForm = $("#addForm");
+            addForm.submit(function (e) {
+                e.preventDefault(); // prevent handling the normal form submit click!
+                $.ajax({
+                    type: addForm.attr('method'),
+                    url: addForm.attr('action'),
+                    data: addForm.serialize(), // get data from form!
+                    success: function (data) {
+                        console.log('Update successful!');
+                        // make a timed Bootstrap Alert on Success
+                        // then re-direct to "/"
+                        $('#successAlert').modal('show');
+                        var timer = setTimeout(function () {
+                            $(location).attr('href', '/item')
+                        }, 2000);
+                    },
+                    error: function (data) {
+                        console.log('An error occurred.');
+                        // make a timed Bootstrap Alert on Error
+                        // then re-direct to "/"
+                        $('#errorAlert').modal('show');
+                        var timer = setTimeout(function () {
+                            $(location).attr('href', '/item')
+                        }, 2000);
+                    },
+                });
+                $('#addModal').modal('hide');
+            });
+            //
+            // Set up the Update Modal - It is shown, and data passed, via button click
+            //
+            $('#itemList').on('click', '.update', function () {
+                $('#updateModal').modal('show');
+                $(".manufacturer").val($(this).data('manufacturer'));
+                $('.model').val($(this).data('model'));
+                $('.price').val($(this).data('price'));
+                $('.id').val($(this).data('id'));
+            });
+            //
+            // Handle Update Modal form submit using AJAX PUT
+            //
+            var updateForm = $("#updateForm");
+            updateForm.submit(function (e) {
+                e.preventDefault(); // prevent handling the normal form submit click!
+                var id = updateForm.find('input[name="itemId"]').val();
+                $.ajax({
+                    type: updateForm.attr('method'),
+                    url: updateForm.attr('action') + "/" + id,
+                    data: updateForm.serialize(), // get data from form!
+                    success: function (data) {
+                        console.log('Update successful!');
+                        // make a timed Bootstrap Alert on Success
+                        // then re-direct to "/"
+                        $('#successAlert').modal('show');
+                        var timer = setTimeout(function () {
+                            $(location).attr('href', '/item')
+                        }, 2000);
+                    },
+                    error: function (data) {
+                        console.log('An error occurred.');
+                        // make a timed Bootstrap Alert on Error
+                        // then re-direct to "/"
+                        $('#errorAlert').modal('show');
+                        var timer = setTimeout(function () {
+                            $(location).attr('href', '/item')
+                        }, 2000);
+                    },
+                });
+                $('#updateModal').modal('hide');
+            });
+            //
+            // Set up the Delete Modal - It is shown, and data passed, via button click
+            //
+            $('#itemList').on('click', '.delete', function () {
+                var item_id = $(this).data('id');
+                // let's remind the user which quotation they are deleting
+                var manufacturer = $(this).data('manufacturer');
+                var model = $(this).data('model');
+                //var subQuote = quotation_quote.substring(0, 15);
+                //var authorSurname = quotation_author.split(" ").splice(-1)[0];
+                $("#deleteModal .modal-body").html("<span class=\"font-weight-bold\">Are you sure you want to delete Customer: </span><span class=\"font-italic\">" + manufacturer + " " + model + "</span><span class=\"font-weight-bold\">?</span>");
+                $('#deleteModal').modal('show');
+                $('.id').val(item_id);
+            });
+            //
+            // Handle Delete Modal form submit using AJAX DELETE
+            //
+            var deleteForm = $("#deleteForm");
+            deleteForm.submit(function (e) {
+                // make everything look like a Single Page Application
+                // consuming the RESTful API routes based on user selection
+                e.preventDefault();  // prevent handling the normal form submit click!
+                var id = deleteForm.find('input[name="itemId"]').val();
+                $.ajax({
+                    type: deleteForm.attr('method'),
+                    url: deleteForm.attr('action') + "/" + id,
+                    success: function (data) {
+                        console.log('Deletion successful!');
+                        // make a timed Bootstrap Alert on Success
+                        // then re-direct to "/"
+                        $('#successAlert').modal('show');
+                        var timer = setTimeout(function () {
+                            $(location).attr('href', '/item')
+                        }, 3000);
+                    },
+                    error: function (data) {
+                        console.log('An error occurred.');
+                        // make a timed Bootstrap Alert on Error
+                        // then re-direct to "/"
+                        $('#errorAlert').modal('show');
+                        var timer = setTimeout(function () {
+                            $(location).attr('href', '/item')
+                        }, 3000);
+                    },
+                });
+                $('#deleteModal').modal('hide');
+            });
+            //
+            // Search: Field Selection
+            //
+            $("#fieldSearchSelect").on('change', function () {
+                var k = $(this).val();
+                if (k == 1) {
+                    $("#tableFilter").attr("placeholder", "Filter Quotation List ...");
+                } else {
+                    $("#tableFilter").attr("placeholder", "Filter Author List ...");
+                }
+                // $("#tableFilter").val("");
+                $("#tableFilter").keyup();
+            });
+            //
+            // Search: Table Filter
+            //
+            $("#tableFilter").keyup(function () {
+                var filter = $(this).val().toUpperCase();
+                $("#itemList").find('tr').each(function (rows) {
+                    if (rows !== 0) {
+                        var row = $(this);
+                        var searching = "";
+                        if ($("#fieldSearchSelect").val() == 1) {
+                            searching = row.find("td:first").text().toUpperCase();
+                        } else {
+                            searching = row.find("td:first + td").text().toUpperCase();
+                        }
+                        if (searching.indexOf(filter) != -1) {
+                            row.show();
+                        } else {
+                            row.hide();
+                        }
+                    }
+                });
+            });
+            //
+            // Search: Database search
+            //
+            $("#databaseSearch").on('click', function () {
+                var search = $("#databaseSearchFilter").val().replace(/[|&;$%@"<>()+,^  ]/g, "");
+                if (search) {
+                    $(location).attr('href', '/' + $("#databaseSearchSelect").val() + '/' + search);
+                } else {
+                    $(location).attr('href', '/' + $("#databaseSearchSelect").val());
+                }
+            });
+            //
+            //  If there is a database filter then add a badge
+            //
+            if ($(location).attr('pathname') !== '/') {
+                $('#databaseFilterNotice').text("(" + $(location).attr('pathname') + ")");
+            }
+        });
+    </script>
+</body>
+
+</html>

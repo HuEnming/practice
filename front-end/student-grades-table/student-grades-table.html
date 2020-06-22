@@ -1,0 +1,143 @@
+<!-- The codes were developed and works well on Manjaro Linux with Firefox 73.0 (64-bit)-->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Grades Table</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css?family=Orbitron&display=swap" rel="stylesheet">
+  <script src="script.js"></script>
+</head>
+
+<body>
+  <!-- title - start -->
+  <h2>Student Grades Table</h2>
+  <!-- title - end -->
+  <!-- table - start -->
+  <table style="width:100%">
+    <tr>
+      <th>Student Name</th>
+      <th>Student ID</th>
+      <th onclick="highlightColumn(event)">Assignment 1</th>
+      <th onclick="highlightColumn(event)">Assignment 2</th>
+      <th onclick="highlightColumn(event)">Assignment 3</th>
+      <th onclick="highlightColumn(event)">Assignment 4</th>
+      <th onclick="highlightColumn(event)">Assignment 5</th>
+      <th onclick="changeGrade(event)">Average (%)</th>
+    </tr>
+    <tr>
+      <td>Smith</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Davies</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Jones</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Williams</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Evans</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Taylor</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Brown</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Johnson</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Thomas</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Wilson</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+  </table>
+  <!-- table - end -->
+  <!-- operation - start -->
+  <div class="operate">
+    <button type="button" onclick="addRow()">+ Add Row</button>&nbsp;
+    <button type="button" onclick="addColumn()">+ Add Column</button>&nbsp;
+    <button type="button" onclick="retrieve()">- Retrieve</button>
+    Un-submiGed Assignment: <span id="count"></span>
+  </div>
+  <!-- operation - end -->
+</body>
+
+</html>
