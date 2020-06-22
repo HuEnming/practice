@@ -46,9 +46,6 @@ Some code snippets about data structure, like stack, queue, sorting, linked list
     ![Online mobile phone store SPA](front-end/online-mobile-phone-store-spa/online-mobile-phone-store-spa.png "Online mobile phone store SPA")
 - Client relationship managemen app (Node.js/MongoDB/Express/Handlebars)
 
-
-    ![Client relationship managemen app](front-end/food-pyramid/food-pyramid.png "Client relationship managemen app")
-
 ## Java
 - Realtime train schedule display (Bootstrap/Servlet/Jsoup)
 
